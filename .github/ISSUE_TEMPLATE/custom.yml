@@ -9,7 +9,7 @@ body:
       description: Http rpc endpoint
       placeholder: ex. 100.100.100.100:9933
     validations:
-      required: false
+      required: true
   - type: input
     id: rpc-ws
     attributes:
@@ -17,7 +17,7 @@ body:
       description: Websocket rpc endpoint
       placeholder: ex. 100.100.100.100:9944
     validations:
-      required: false
+      required: true
   - type: input
     attributes:
       label: Address
