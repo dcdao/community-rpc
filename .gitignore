@@ -4,9 +4,6 @@ target
 
 
 scripts/logs
-scripts/*.local.sh
-scripts/**/*.local.sh
-scripts/**/package-lock.json
 
 node_modules
 
@@ -14,6 +11,7 @@ generated
 
 *.dep.txt
 *.log
+*.local.*
 
 package-lock.json
 dist
