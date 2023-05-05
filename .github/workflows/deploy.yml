@@ -42,16 +42,11 @@ jobs:
       - name: Trigger deploy
         run: |
           gh workflow run \
-            staging.yaml \
-            --repo=darwinia-network/bridger \
-            --ref=master
+            trigger.yml \
+            --ref=main \
+            --repo=darwinia-network/ansible-playbooks \
+            --raw-field=file=roles/community-rpc/files/cds.yaml \
+            --raw-field="content=$(cat dist/cds.local.yaml)"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TKN_DARWINIA }}
 
-
-#          gh workflow run \
-#            trigger.yml \
-#            --ref=main \
-#            --repo=darwinia-network/ansible-playbooks \
-#            --raw-field=file=roles/community-rpc/files/cds.yaml \
-#            --raw-field="content=$(cat dist/cds.local.yaml)"
