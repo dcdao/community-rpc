@@ -41,13 +41,6 @@ jobs:
 
       - name: Trigger deploy
         run: |
-#          gh workflow run \
-#            trigger.yml \
-#            --ref=main \
-#            --repo=darwinia-network/ansible-playbooks \
-#            --raw-field=file=roles/community-rpc/files/cds.yaml \
-#            --raw-field="content=$(cat dist/cds.local.yaml)"
-
           gh workflow run \
             staging.yaml \
             --repo=darwinia-network/bridger \
@@ -55,3 +48,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
+#          gh workflow run \
+#            trigger.yml \
+#            --ref=main \
+#            --repo=darwinia-network/ansible-playbooks \
+#            --raw-field=file=roles/community-rpc/files/cds.yaml \
+#            --raw-field="content=$(cat dist/cds.local.yaml)"
