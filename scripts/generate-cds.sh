@@ -26,7 +26,7 @@ parse() {
   echo "start parse ${CHAIN}"
 
   ## http
-  HTTP_MD=${WORK_PATH}/provider/${CHAIN}/http.md
+  HTTP_MD=${WORK_PATH}/provider/${CHAIN}/http.csv
   export SCHEMA_JSON=$(_gen_schema ${CHAIN} http)
   export ENDPOINTS=$(mlr --c2j cat ${HTTP_MD})
 
@@ -41,7 +41,7 @@ parse() {
   echo "parse ${CHAIN} http"
 
   ## websocket
-  WS_MD=${WORK_PATH}/provider/${CHAIN}/websocket.md
+  WS_MD=${WORK_PATH}/provider/${CHAIN}/websocket.csv
   export SCHEMA_JSON=$(_gen_schema ${CHAIN} ws)
   export ENDPOINTS=$(mlr --c2j cat ${WS_MD})
 
