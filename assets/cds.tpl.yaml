@@ -25,7 +25,7 @@
         - lb_endpoints:
             {{ range (ds "endpoints") }}
             {{- $socket_address := .endpoint | strings.Split ":" -}}
-            # {{ .address }}
+            # {{ .address }}  {{ .alias }}
             - endpoint:
                 address:
                   socket_address:
