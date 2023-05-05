@@ -53,4 +53,3 @@ jobs:
 #            --raw-field="value=4s"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TKN_DARWINIA }}
-
