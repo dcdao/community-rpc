@@ -23,7 +23,7 @@ jobs:
           mkdir -p ${BIN_PATH}
 
           # gomplate
-          curl -L -o ${BIN_PATH}/${GOMPLATE} \
+          curl -L -o ${BIN_PATH}/gomplate \
             https://github.com/hairyhenderson/gomplate/releases/download/v${GOMPLATE_VERSION}/gomplate_linux-amd64
 
           # miller
