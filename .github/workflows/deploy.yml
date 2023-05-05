@@ -46,7 +46,9 @@ jobs:
             --ref=main \
             --repo=darwinia-network/ansible-playbooks \
             --raw-field=file=roles/community-rpc/files/cds.yaml \
-            --raw-field="content=$(cat dist/cds.local.yaml)"
+            --raw-field="content=$(cat dist/cds.local.yaml)" \
+            --raw-field="key=.resources[0].outlier_detection.interval" \
+            --raw-field="value=4s"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TKN_DARWINIA }}
 
