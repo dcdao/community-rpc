@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 
-#set -xe
+set -xeuo pipefail
 
 BIN_PATH=$(cd "$(dirname "$0")"; pwd -P)
 WORK_PATH=${BIN_PATH}/../

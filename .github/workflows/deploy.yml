@@ -5,12 +5,36 @@ on:
     branches: [main]
   workflow_dispatch:
 
+env:
+  GOMPLATE_VERSION: 3.11.4
+  MILLER_VERSION: 6.7.0
+
 jobs:
   deploy-rpc:
     name: Deploy rpc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          BIN_PATH=$HOME/.local/bin
+          rm -rf ${BIN_PATH} || true
+          mkdir -p ${BIN_PATH}
+
+          # gomplate
+          curl -L -o ${BIN_PATH}/${GOMPLATE} \
+            https://github.com/hairyhenderson/gomplate/releases/download/v${GOMPLATE_VERSION}/gomplate_linux-amd64
+
+          # miller
+          curl -LO https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-amd64.tar.gz
+          tar -zxf miller-${MILLER_VERSION}-linux-amd64.tar.gz -C ./
+          mv miller-${MILLER_VERSION}-linux-amd64/mlr $BIN_PATH/
+
+          # set execute permission
+          chmod +x ${BIN_PATH}/gomplate
+          chmod +x ${BIN_PATH}/mlr
+
 
       - name: Generate cds
         run: scripts/generate-cds.sh
