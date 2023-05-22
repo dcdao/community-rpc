@@ -44,12 +44,18 @@ jobs:
       - name: Trigger deploy
         run: |
           MESSAGE='${{ github.event.head_commit.message }}'
+          jq -n \
+            --arg file roles/community-rpc/files/cds.yaml \
+            --arg content "$(cat dist/cds.local.yaml)" \
+            '{file: $file, content: $content}' >> /tmp/changes.json
+
+          MULTI_CHANGES=$(jq -crs '.' < /tmp/changes.json)
+
           gh workflow run \
             trigger.yml \
             --ref=main \
             --repo=darwinia-network/ansible-playbooks \
-            --raw-field=file=roles/community-rpc/files/cds.yaml \
-            --raw-field="content=$(cat dist/cds.local.yaml)" \
+            --raw-field="changes=${MULTI_CHANGES}" \
             --raw-field="message=[community-rpc]: ${MESSAGE}" \
 #            --raw-field="key=.resources[0].outlier_detection.interval" \
 #            --raw-field="value=4s"
