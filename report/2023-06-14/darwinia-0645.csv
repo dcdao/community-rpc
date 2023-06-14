@@ -1,0 +1,3 @@
+time_connect,time_starttransfer,time_total,available,node_version,alias,address,endpoint,protocol
+0.100097,0.190526,0.190576,true,6.3.0-unknown,fewensa,0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac,eu1.cntb.kahub.in:9203,http
+0.100021,0.195165,0.195215,true,6.3.0-unknown,fewensa,0xf24FF3a9CF04c71Dbc94D0b566f7A27B94566cac,eu1.cntb.kahub.in:9204,ws
