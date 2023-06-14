@@ -41,6 +41,11 @@ jobs:
       - name: Check http
         run: scripts/report-endpoint.sh ${{ matrix.chain }}
 
+      - name: Remove old report
+        run: |
+          THREE_MONTHS_AGO=$(date --date='3 months ago' +%Y-%m)
+          rm -rf report/${THREE_MONTHS_AGO}*
+
       - name: Commit files
         run: |
           MSG=$(cat dist/latest.log)
