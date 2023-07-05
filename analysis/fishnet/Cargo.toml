@@ -1,0 +1,27 @@
+[package]
+name = "fishnet"
+version = "0.1.0"
+edition = "2021"
+authors = ["Darwinia Network <hello@darwinia.network>"]
+description = "Darwinia Community RPC"
+repository = "https://github.com/dcdao/community-rpc"
+license = "MIT"
+homepage = "https://github.com/dcdao/community-rpc"
+include = [
+  "Cargo.toml",
+  "**/*.rs",
+  "README.md",
+  "LICENSE"
+]
+keywords = ["darwinia"]
+readme = 'README.md'
+
+[dependencies]
+
+tracing     = "0.1"
+color-eyre  = "0.6"
+sentry      = "0.31"
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+thiserror   = "1"
+
