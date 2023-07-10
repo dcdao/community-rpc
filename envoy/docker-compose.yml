@@ -1,0 +1,12 @@
+version: '3'
+services:
+
+  envoy:
+    container_name: envoy
+    image: envoyproxy/envoy:v1.26-latest
+    network_mode: host
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ${PATH_CONF}:/etc/envoy
+

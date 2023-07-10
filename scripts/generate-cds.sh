@@ -38,6 +38,8 @@ parse() {
   ## ---
   echo '' >> ${DEST_CONFIG}
   echo "parse ${CHAIN} provide"
+
+  cp ${DEST_CONFIG} ${WORK_PATH}/envoy/conf
 }
 
 
