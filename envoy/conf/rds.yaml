@@ -1,0 +1,32 @@
+version_info: "0"
+resources:
+  - "@type": type.googleapis.com/envoy.config.route.v3.RouteConfiguration
+    name: route_config_1
+    virtual_hosts:
+      - name: backend
+        domains:
+          - "*"
+        routes:
+          - match:
+              prefix: "/"
+#              headers:
+#                - name: ":authority"
+#                  exact_match: "localhost"
+            route:
+              cluster: cds_crab_rpc
+              host_rewrite_literal: localhost
+              retry_policy:
+                retry_on: "5xx"
+                num_retries: 5
+
+          - match:
+              prefix: "/"
+#              headers:
+#                - name: ":authority"
+#                  exact_match: "localhost"
+            route:
+              cluster: cds_darwinia_rpc
+              host_rewrite_literal: localhost
+              retry_policy:
+                retry_on: "5xx"
+                num_retries: 5
