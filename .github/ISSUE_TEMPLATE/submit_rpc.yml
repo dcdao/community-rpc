@@ -13,14 +13,6 @@ body:
     validations:
       required: true
   - type: input
-    id: rpc-http
-    attributes:
-      label: Http Endpoint
-      description: Http rpc endpoint
-      placeholder: ex. 100.100.100.100:9933
-    validations:
-      required: true
-  - type: input
     id: rpc-ws
     attributes:
       label: Websocket Endpoint
