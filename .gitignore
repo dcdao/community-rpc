@@ -12,6 +12,7 @@ generated
 *.dep.txt
 *.log
 *.local.*
+*.env
 
 package-lock.json
 dist
