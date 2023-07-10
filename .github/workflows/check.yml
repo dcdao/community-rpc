@@ -41,7 +41,7 @@ jobs:
       - name: Generate cds
         run: scripts/generate-cds.sh
 
-      - name: Trigger deploy
+      - name: Preview changes
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TKN_DARWINIA }}
         run: cat dist/cds.local.yaml
