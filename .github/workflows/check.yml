@@ -1,10 +1,10 @@
-name: Deploy
+name: Check
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:
-
+  pull_request:
+    branches: [main]
 
 jobs:
   deploy-rpc:
@@ -44,18 +44,4 @@ jobs:
       - name: Trigger deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TKN_DARWINIA }}
-        run: |
-          MESSAGE="${{ github.event.head_commit.message }}"
-          jq -n \
-            --arg file roles/community-rpc/files/cds.yaml \
-            --arg content "$(cat dist/cds.local.yaml)" \
-            '{file: $file, content: $content}' >> /tmp/changes.json
-
-          MULTI_CHANGES=$(jq -crs '.' < /tmp/changes.json)
-
-          gh workflow run \
-            trigger.yml \
-            --ref=main \
-            --repo=darwinia-network/ansible-playbooks \
-            --raw-field="changes=${MULTI_CHANGES}" \
-            --raw-field="message=[community-rpc]: ${MESSAGE}" \
+        run: cat dist/cds.local.yaml
