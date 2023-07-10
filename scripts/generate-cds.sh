@@ -11,8 +11,7 @@ DEST_CONFIG=${WORK_PATH}/dist/cds.local.yaml
 
 _gen_schema() {
   CHAIN=$1
-  PROTOCOL=$2
-  echo '{"chain": "'${CHAIN}'", "protocol": "'${PROTOCOL}'"}'
+  echo '{"chain": "'${CHAIN}'"}'
 }
 
 init() {
@@ -26,8 +25,8 @@ parse() {
   echo "start parse ${CHAIN}"
 
   ## http
-  HTTP_MD=${WORK_PATH}/provider/${CHAIN}/http.csv
-  export SCHEMA_JSON=$(_gen_schema ${CHAIN} http)
+  HTTP_MD=${WORK_PATH}/provider/${CHAIN}.csv
+  export SCHEMA_JSON=$(_gen_schema ${CHAIN})
   export ENDPOINTS=$(mlr --c2j cat ${HTTP_MD})
 
   cat ${WORK_PATH}/assets/cds.tpl.yaml \
@@ -38,19 +37,7 @@ parse() {
 
   ## ---
   echo '' >> ${DEST_CONFIG}
-  echo "parse ${CHAIN} http"
-
-  ## websocket
-  WS_MD=${WORK_PATH}/provider/${CHAIN}/websocket.csv
-  export SCHEMA_JSON=$(_gen_schema ${CHAIN} ws)
-  export ENDPOINTS=$(mlr --c2j cat ${WS_MD})
-
-  cat ${WORK_PATH}/assets/cds.tpl.yaml \
-    | gomplate \
-    -d endpoints='env:/ENDPOINTS?type=application/json' \
-    -d schema='env:/SCHEMA_JSON?type=application/json' \
-    >> ${DEST_CONFIG}
-  echo "parse ${CHAIN} ws"
+  echo "parse ${CHAIN} provide"
 }
 
 
