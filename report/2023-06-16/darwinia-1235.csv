@@ -1,7 +1,0 @@
-time_connect,time_starttransfer,time_total,available,node_version,alias,address,endpoint,protocol
-0.102345,0.194858,0.194921,true,6.3.0-unknown,fewensa,0x6B1F72D45FAe62Bc56fe981754cBf73672EFD26c,eu1.cntb.kahub.in:9203,http
-0.156123,0.472177,0.472267,true,6.1.0-unknown,hukfrog,0x3C7533361d051Fa9eA2D730FF852b7b0214E3A0F,54.250.172.141:9933,http
-0.092334,0.183728,0.183818,true,6.1.0-unknown,guantong,0x65f1430B40f18629a1cd5F3c2b7607F985E3E103,194.163.139.117:8833,http
-0.09829,0.189052,0.189148,true,6.3.0-unknown,fewensa,0x6B1F72D45FAe62Bc56fe981754cBf73672EFD26c,eu1.cntb.kahub.in:9204,ws
-0.164002,1.012841,1.012917,true,6.1.0-unknown,hukfrog,0x3C7533361d051Fa9eA2D730FF852b7b0214E3A0F,54.250.172.141:9933,ws
-0.098796,0.194978,0.195047,true,6.1.0-unknown,guantong,0x65f1430B40f18629a1cd5F3c2b7607F985E3E103,194.163.139.117:8844,ws
