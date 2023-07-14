@@ -14,7 +14,7 @@ pub fn init_log() -> Result<(), InitializerError> {
   //     std::env::set_var("RUST_LIB_BACKTRACE", "full");
   // }
 
-  let def_log_filter = ["info", "cmta_fishnet=trace", "cmta_telescope=trace"].join(",");
+  let def_log_filter = ["info", "fishnet=trace", "telescope=trace"].join(",");
 
   let use_json_adapter = std::env::var("LOG_ADAPTER")
     .map(|v| &v.to_lowercase()[..] == "json")
