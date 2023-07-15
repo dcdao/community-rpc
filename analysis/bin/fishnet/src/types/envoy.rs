@@ -1,4 +1,7 @@
+use std::str::FromStr;
+
 use serde::{Deserialize, Serialize};
+use sha1::{Digest, Sha1};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ClusterInfo {
@@ -21,6 +24,22 @@ pub struct HostStatus {
   pub health_status: HealthStatus,
   pub weight: u32,
   pub hostname: String,
+}
+
+impl HostStatus {
+  pub fn id(&self, cluster: impl AsRef<str>) -> String {
+    let mut hasher = Sha1::new();
+    hasher.update(cluster.as_ref());
+    hasher.update(self.endpoint());
+    let hash_result = hasher.finalize();
+    format!("{:x}", hash_result)
+  }
+  pub fn endpoint(&self) -> String {
+    format!(
+      "{}:{}",
+      self.address.socket_address.address, self.address.socket_address.port_value
+    )
+  }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -56,4 +75,30 @@ pub struct CBThreshold {
   pub max_pending_requests: u64,
   pub max_requests: u64,
   pub max_retries: u64,
+}
+
+pub struct HStatPlus {
+  stats: Vec<HStat>,
+}
+
+impl HStatPlus {
+  pub fn new(stats: Vec<HStat>) -> Self {
+    Self { stats }
+  }
+}
+
+impl HStatPlus {
+  pub fn value(&self, name: impl AsRef<str>) -> Option<String> {
+    for stat in &self.stats {
+      if stat.name == name.as_ref() {
+        return Some(stat.value.clone());
+      }
+    }
+    None
+  }
+
+  pub fn value_int(&self, name: impl AsRef<str>) -> Option<u64> {
+    let value = self.value(name)?;
+    return u64::from_str(&value).ok();
+  }
 }

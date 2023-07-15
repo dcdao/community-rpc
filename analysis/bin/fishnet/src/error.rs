@@ -9,4 +9,8 @@ pub enum FishnetError {
   Custom(String),
   #[error(transparent)]
   Reqwest(#[from] reqwest::Error),
+  #[error(transparent)]
+  Json(#[from] serde_json::Error),
+  #[error(transparent)]
+  Io(#[from] std::io::Error),
 }

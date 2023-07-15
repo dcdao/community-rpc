@@ -6,6 +6,7 @@ mod cli;
 mod error;
 mod handler;
 mod service;
+mod store;
 mod types;
 
 #[tokio::main]
