@@ -10,6 +10,6 @@ pub async fn handle_start(input: FishnetStartInput) -> color_eyre::Result<()> {
     if let Err(e) = service.analysis().await {
       tracing::error!(target: "fishnet", "failed to analysis envoy status log: {:?}", e);
     }
-    tokio::time::sleep(std::time::Duration::from_secs(10)).await;
+    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
   }
 }

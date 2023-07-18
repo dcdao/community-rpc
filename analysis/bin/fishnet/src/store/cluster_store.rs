@@ -75,6 +75,9 @@ impl ClusterState {
     cluster_name: String,
     host_status: HostStatus,
   ) -> FishnetResult<()> {
+    let content_latest = fs::read_to_string(&self.file_latest).await?;
+    let mut latests: Vec<ClusterReport> = serde_json::from_str(&content_latest).unwrap_or(vec![]);
+
     let hstat_plus = HStatPlus::new(host_status.stats.clone());
     let id = host_status.id(&cluster_name);
 
@@ -83,60 +86,80 @@ impl ClusterState {
     let rq_timeout = hstat_plus.value_int("rq_timeout").unwrap_or(0);
     let rq_total = hstat_plus.value_int("rq_total").unwrap_or(0);
 
-    if self.reports.iter().any(|item| item.id == id) {
-      let content_latest = fs::read_to_string(&self.file_latest).await?;
-      let latests: Vec<ClusterReport> = serde_json::from_str(&content_latest).unwrap_or(vec![]);
-      for report in &mut self.reports {
-        if report.id != id {
-          continue;
-        }
-        match latests.iter().find(|&item| item.id == id) {
-          None => {
-            report.rq_error = rq_error;
-            report.rq_success = rq_success;
-            report.rq_timeout = rq_timeout;
-            report.rq_total = rq_total;
-          }
-          Some(latest) => {
-            report.rq_error += if rq_error < latest.rq_error {
-              rq_error
-            } else {
-              rq_error - latest.rq_error
-            };
-            report.rq_success += if rq_error < latest.rq_success {
-              rq_error
-            } else {
-              rq_error - latest.rq_success
-            };
-            report.rq_timeout += if rq_error < latest.rq_timeout {
-              rq_error
-            } else {
-              rq_error - latest.rq_timeout
-            };
-            report.rq_total += if rq_error < latest.rq_total {
-              rq_error
-            } else {
-              rq_error - latest.rq_total
-            };
-          }
-        }
+    // update month report
+    match self.reports.iter_mut().find(|report| report.id == id) {
+      None => {
+        self.reports.push(ClusterReport {
+          id: id.clone(),
+          name: cluster_name.clone(),
+          endpoint: host_status.endpoint(),
+          hostname: host_status.hostname.clone(),
+          weight: host_status.weight,
+          rq_error,
+          rq_success,
+          rq_timeout,
+          rq_total,
+        });
       }
-    } else {
-      self.reports.push(ClusterReport {
-        id,
-        name: cluster_name.clone(),
-        endpoint: host_status.endpoint(),
-        hostname: host_status.hostname.clone(),
-        weight: host_status.weight,
-        rq_error,
-        rq_success,
-        rq_timeout,
-        rq_total,
-      });
+      Some(report) => match latests.iter().find(|&item| item.id == id) {
+        None => {
+          report.rq_error = rq_error;
+          report.rq_success = rq_success;
+          report.rq_timeout = rq_timeout;
+          report.rq_total = rq_total;
+        }
+        Some(latest) => {
+          report.rq_error += if rq_error < latest.rq_error {
+            rq_error
+          } else {
+            rq_error - latest.rq_error
+          };
+          report.rq_success += if rq_success < latest.rq_success {
+            rq_success
+          } else {
+            rq_success - latest.rq_success
+          };
+          report.rq_timeout += if rq_timeout < latest.rq_timeout {
+            rq_timeout
+          } else {
+            rq_timeout - latest.rq_timeout
+          };
+          report.rq_total += if rq_total < latest.rq_total {
+            rq_total
+          } else {
+            rq_total - latest.rq_total
+          };
+        }
+      },
     }
-    let json = serde_json::to_string_pretty(&self.reports)?;
-    fs::write(&self.file_month, &json).await?;
-    fs::write(&self.file_latest, &json).await?;
+
+    // update latest report
+    match latests.iter_mut().find(|item| item.id == id) {
+      None => {
+        latests.push(ClusterReport {
+          id,
+          name: cluster_name.clone(),
+          endpoint: host_status.endpoint(),
+          hostname: host_status.hostname.clone(),
+          weight: host_status.weight,
+          rq_error,
+          rq_success,
+          rq_timeout,
+          rq_total,
+        });
+      }
+      Some(report) => {
+        report.rq_error = rq_error;
+        report.rq_success = rq_success;
+        report.rq_timeout = rq_timeout;
+        report.rq_total = rq_total;
+      }
+    };
+
+    let json_month = serde_json::to_string_pretty(&self.reports)?;
+    let json_latest = serde_json::to_string_pretty(&latests)?;
+    fs::write(&self.file_month, &json_month).await?;
+    fs::write(&self.file_latest, &json_latest).await?;
     tracing::info!(
       target: "fishnet",
       "write cluster report to {}",
