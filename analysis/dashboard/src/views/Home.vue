@@ -187,12 +187,9 @@ function calculateRewardCluster(clusters: ClusterInfo[], rewardCluster: number) 
   let totalSlash = 0;
   for (const item of clusters) {
     const rateRqSuccess = item.rq_success / totalRqSuccess;
-    // const rateRqError = item.rq_error / totalRqError;
-    // const rateRqTimeout = item.rq_timeout / totalRqTimeout;
-    const rateRqError = item.rq_error / item.rq_success;
+    const rateRqError = item.rq_error >= item.rq_success ? 1 : item.rq_error / item.rq_success;
     const rewardSuccess = rateRqSuccess * rewardCluster;
-    const slashAvailable = rewardSuccess / 1;
-    const slashError = slashAvailable * rateRqError;
+    const slashError = rewardSuccess * rateRqError;
     const rewardGainBasic = rewardSuccess - slashError;
     totalSlash += slashError;
     rewardProviders.push({
@@ -201,7 +198,6 @@ function calculateRewardCluster(clusters: ClusterInfo[], rewardCluster: number) 
       rateRqSuccess,
       rateRqError,
       rewardSuccess,
-      slashAvailable,
       slashError,
       rewardGainBasic,
     });
