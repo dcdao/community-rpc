@@ -128,6 +128,7 @@ const chosenMonth = ref('' as string);
 const monthList = ref([] as string[]);
 const clusterInfos = ref([] as ClusterInfo[]);
 const rewardReview = ref({});
+let intervalLoadCluster = null;
 const rewardTotal = 3000;
 const base_url = {
   dev: 'http://60.214.102.126:10234',
@@ -218,7 +219,13 @@ function calculateRewardCluster(clusters: ClusterInfo[], rewardCluster: number) 
 }
 
 async function changedMonth() {
+  if (intervalLoadCluster) {
+    clearInterval(intervalLoadCluster);
+  }
   await loadClusterInfo();
+  intervalLoadCluster = setInterval(() => {
+    loadClusterInfo();
+  }, 3000);
 }
 
 async function initState() {
@@ -231,10 +238,7 @@ async function initState() {
     months.push(moment(d).format('YYYY-MM'));
   }
   monthList.value = months;
-  await loadClusterInfo();
-  setInterval(() => {
-    loadClusterInfo();
-  }, 3000);
+  await changedMonth();
 }
 
 onBeforeMount(() => {

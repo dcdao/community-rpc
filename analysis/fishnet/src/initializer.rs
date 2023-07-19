@@ -5,16 +5,21 @@ use tracing::Level;
 // use tracing_subscriber::fmt::time::SystemTime;
 use tracing_subscriber::EnvFilter;
 
-use crate::error::InitializerError;
+use crate::error::{FishnetError, FishnetResult};
 
-pub fn init_log() -> Result<(), InitializerError> {
-  color_eyre::install().map_err(|e| InitializerError::Custom(format!("{:?}", e)))?;
+pub fn init() -> FishnetResult<()> {
+  init_log()?;
+  Ok(())
+}
+
+fn init_log() -> FishnetResult<()> {
+  color_eyre::install().map_err(|e| FishnetError::Custom(format!("{:?}", e)))?;
   // if std::env::var("RUST_BACKTRACE").is_err() {
   //     std::env::set_var("RUST_SPANTRACE", "1");
   //     std::env::set_var("RUST_LIB_BACKTRACE", "full");
   // }
 
-  let def_log_filter = ["info", "fishnet=trace", "telescope=trace"].join(",");
+  let def_log_filter = ["info", "fishnet=trace"].join(",");
 
   let use_json_adapter = std::env::var("LOG_ADAPTER")
     .map(|v| &v.to_lowercase()[..] == "json")

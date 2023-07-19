@@ -30,7 +30,11 @@ impl ClusterStore {
     if !dir.exists() {
       fs::create_dir_all(&dir).await?;
     }
-    Ok(dir.join("cluster.json"))
+    let file = dir.join("cluster.json");
+    if !file.exists() {
+      fs::write(&file, "").await?;
+    }
+    Ok(file)
   }
 
   async fn safe_file_latest(&self) -> FishnetResult<PathBuf> {
@@ -38,7 +42,11 @@ impl ClusterStore {
     if !dir.exists() {
       fs::create_dir_all(&dir).await?;
     }
-    Ok(dir.join("latest.json"))
+    let file = dir.join("latest.json");
+    if !file.exists() {
+      fs::write(&file, "").await?;
+    }
+    Ok(file)
   }
 }
 

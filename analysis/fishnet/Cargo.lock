@@ -162,7 +162,6 @@ name = "cmta-fishnet"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "cmta-initializer",
  "color-eyre",
  "reqwest",
  "sentry",
@@ -173,30 +172,8 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
-]
-
-[[package]]
-name = "cmta-initializer"
-version = "0.1.0"
-dependencies = [
- "color-eyre",
- "thiserror",
- "tracing",
  "tracing-attributes",
  "tracing-subscriber",
-]
-
-[[package]]
-name = "cmta-telescope"
-version = "0.1.0"
-dependencies = [
- "cmta-initializer",
- "color-eyre",
- "sentry",
- "serde",
- "serde_json",
- "thiserror",
- "tracing",
 ]
 
 [[package]]
