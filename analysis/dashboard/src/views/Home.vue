@@ -176,8 +176,8 @@ function calculateReward() {
 
 function calculateRewardCluster(clusters: ClusterInfo[], rewardCluster: number) {
   const totalRqSuccess = Stream(clusters).sum('rq_success');
-  const totalRqError = Stream(clusters).sum('rq_error');
-  const totalRqTimeout = Stream(clusters).sum('rq_timeout');
+  // const totalRqError = Stream(clusters).sum('rq_error');
+  // const totalRqTimeout = Stream(clusters).sum('rq_timeout');
   const rewardProviders = [];
   const rewardReview = {
     rewardCluster,
