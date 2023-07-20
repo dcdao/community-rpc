@@ -4,6 +4,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  DOCKER_REGISTRY: ghcr.io
 
 jobs:
   release-fishnet:
@@ -11,3 +17,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build fishnet
+        run: cargo build --release
+
+      - name: Docker login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.DOCKER_REGISTRY }}
+
+      - name: Tag
+        uses: olegtarasov/get-tag@v2.1
+      - name: Sha
+        uses: benjlevesque/short-sha@v1.2
+
+      - name: Publish docker image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: .
+          file: .maintain/docker/fishnet.Dockerfile
+          tags: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/fishnet:sha-${{ env.SHA }}
