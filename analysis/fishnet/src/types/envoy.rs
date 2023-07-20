@@ -56,7 +56,7 @@ pub struct SocketAddress {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct HStat {
   pub name: String,
-  pub value: String,
+  pub value: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -91,7 +91,7 @@ impl HStatPlus {
   pub fn value(&self, name: impl AsRef<str>) -> Option<String> {
     for stat in &self.stats {
       if stat.name == name.as_ref() {
-        return Some(stat.value.clone());
+        return stat.value.clone();
       }
     }
     None
