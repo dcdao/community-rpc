@@ -28,8 +28,8 @@ jobs:
 
           # miller
           curl -LO https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-386.tar.gz
-          tar -zxf miller-${MILLER_VERSION}-linux-amd64.tar.gz -C ./
-          mv miller-${MILLER_VERSION}-linux-amd64/mlr $BIN_PATH/
+          tar -zxf miller-${MILLER_VERSION}-linux-386.tar.gz -C ./
+          mv miller-${MILLER_VERSION}-linux-386/mlr $BIN_PATH/
 
           # set execute permission
           chmod +x ${BIN_PATH}/gomplate
