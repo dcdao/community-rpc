@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  deploy-rpc:
-    name: Deploy rpc
+  check-rpc-provider:
+    name: Check RPC provider
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,3 +45,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TKN_DARWINIA }}
         run: cat dist/cds.local.yaml
+
+  check-fishnet:
+    name: Check fishnet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Lint
+        run: |
+          cd analysis/fishnet
+          cargo clippy --release --all -- -D warnings
+      - name: Run tests
+        run: |
+          cd analysis/fishnet
+          cargo test --release
+
