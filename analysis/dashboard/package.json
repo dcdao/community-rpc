@@ -3,8 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode dev",
     "build": "vue-tsc --noEmit && vite build",
+    "build:prod": "vite build --mode prod",
+    "build:devp": "vite build --mode dev",
+    "build:test": "vite build --mode test",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore"
   },

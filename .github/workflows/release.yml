@@ -47,3 +47,39 @@ jobs:
           context: .
           file: .maintain/docker/fishnet.Dockerfile
           tags: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/fishnet:sha-${{ env.SHA }}
+
+  release-dashboard:
+    name: Release dashboard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Build dashboard
+        run: |
+          cd analysis/dashboard
+          yarn install
+          yarn build:prod
+
+      - name: Docker login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ${{ env.DOCKER_REGISTRY }}
+
+      - name: Tag
+        uses: olegtarasov/get-tag@v2.1
+      - name: Sha
+        uses: benjlevesque/short-sha@v1.2
+
+      - name: Publish docker image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: .
+          file: .maintain/docker/dashboard.Dockerfile
+          tags: ${{ env.DOCKER_REGISTRY }}/${{ github.repository }}/dashboard:sha-${{ env.SHA }}

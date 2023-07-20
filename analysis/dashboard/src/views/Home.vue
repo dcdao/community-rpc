@@ -130,14 +130,9 @@ const clusterInfos = ref([] as ClusterInfo[]);
 const rewardReview = ref({});
 let intervalLoadCluster = null;
 const rewardTotal = 3000;
-const base_url = {
-  dev: 'http://60.214.102.126:10234',
-  pro: 'https://community-rpc-api.darwiniacommunitydao.xyz',
-  test: 'https://community-rpc-api.darwiniacommunitydao.xyz',
-}
 
 async function loadClusterInfo() {
-  const PATH_URL = base_url[import.meta.env.VITE_API_BASEPATH ?? 'dev']
+  const PATH_URL = import.meta.env.VITE_API_BASEPATH;
   try {
     const resp = await axios.get(`${PATH_URL}/cluster/${chosenMonth.value}/cluster.json?_=${+new Date()}`);
     clusterInfos.value = resp.data;
