@@ -15,8 +15,8 @@ jobs:
 
       - name: Install dependencies
         env:
-          GOMPLATE_VERSION: 3.11.4
-          MILLER_VERSION: 6.7.0
+          GOMPLATE_VERSION: 3.11.5
+          MILLER_VERSION: 6.8.0
         run: |
           BIN_PATH=$HOME/.local/bin
           rm -rf ${BIN_PATH} || true
@@ -27,7 +27,7 @@ jobs:
             https://github.com/hairyhenderson/gomplate/releases/download/v${GOMPLATE_VERSION}/gomplate_linux-amd64
 
           # miller
-          curl -LO https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-amd64.tar.gz
+          curl -LO https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-386.tar.gz
           tar -zxf miller-${MILLER_VERSION}-linux-amd64.tar.gz -C ./
           mv miller-${MILLER_VERSION}-linux-amd64/mlr $BIN_PATH/
 
@@ -54,8 +54,6 @@ jobs:
 
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ env.RUST_TOOLCHAIN }}
 
       - name: Lint
         run: |
