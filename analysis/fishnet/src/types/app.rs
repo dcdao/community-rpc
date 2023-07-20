@@ -24,10 +24,10 @@ impl FishnetStartInput {
     let data_path = std::env::current_exe()?
       .parent()
       .map(|item| item.join("report"))
-      .ok_or_else(|| FishnetError::Custom(format!("cannot get running dir")))?;
+      .ok_or_else(|| FishnetError::Custom("cannot get running dir".to_string()))?;
     if !data_path.exists() {
       std::fs::create_dir_all(&data_path)?;
     }
-    return Ok(data_path);
+    Ok(data_path)
   }
 }

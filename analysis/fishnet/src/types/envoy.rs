@@ -99,6 +99,6 @@ impl HStatPlus {
 
   pub fn value_int(&self, name: impl AsRef<str>) -> Option<u64> {
     let value = self.value(name)?;
-    return u64::from_str(&value).ok();
+    u64::from_str(&value).ok()
   }
 }
