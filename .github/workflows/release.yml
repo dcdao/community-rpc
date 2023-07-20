@@ -1,4 +1,4 @@
-name: Deploy
+name: Release
 
 on:
   push:
@@ -24,7 +24,9 @@ jobs:
           toolchain: stable
 
       - name: Build fishnet
-        run: cargo build --release
+        run: |
+          cd analysis/fishnet
+          cargo build --release
 
       - name: Docker login
         uses: docker/login-action@v1
