@@ -7,16 +7,16 @@ on:
     branches: [main]
 
 jobs:
-  deploy-rpc:
-    name: Deploy rpc
+  check-rpc-provider:
+    name: Check RPC provider
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
         env:
-          GOMPLATE_VERSION: 3.11.4
-          MILLER_VERSION: 6.7.0
+          GOMPLATE_VERSION: 3.11.5
+          MILLER_VERSION: 6.8.0
         run: |
           BIN_PATH=$HOME/.local/bin
           rm -rf ${BIN_PATH} || true
@@ -27,9 +27,9 @@ jobs:
             https://github.com/hairyhenderson/gomplate/releases/download/v${GOMPLATE_VERSION}/gomplate_linux-amd64
 
           # miller
-          curl -LO https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-amd64.tar.gz
-          tar -zxf miller-${MILLER_VERSION}-linux-amd64.tar.gz -C ./
-          mv miller-${MILLER_VERSION}-linux-amd64/mlr $BIN_PATH/
+          curl -LO https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-386.tar.gz
+          tar -zxf miller-${MILLER_VERSION}-linux-386.tar.gz -C ./
+          mv miller-${MILLER_VERSION}-linux-386/mlr $BIN_PATH/
 
           # set execute permission
           chmod +x ${BIN_PATH}/gomplate
@@ -45,3 +45,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TKN_DARWINIA }}
         run: cat dist/cds.local.yaml
+
+  check-fishnet:
+    name: Check fishnet
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Lint
+        run: |
+          cd analysis/fishnet
+          cargo clippy --release --all -- -D warnings
+      - name: Run tests
+        run: |
+          cd analysis/fishnet
+          cargo test --release
+
