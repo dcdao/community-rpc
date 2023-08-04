@@ -101,9 +101,8 @@ impl ClusterState {
     if day == 1 {
       let total_latest = latests
         .iter()
-        .filter(|item| item.id == id)
+        .find(|item| item.id == id)
         .map(|item| item.rq_total)
-        .find()
         .unwrap_or(0);
       // if current rq_total less then latest, indicates that envoy has performed a monthly reset
       if rq_total < total_latest {
