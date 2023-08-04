@@ -1,3 +1,4 @@
+use chrono::Datelike;
 use std::path::PathBuf;
 
 use tokio::fs;
@@ -93,6 +94,21 @@ impl ClusterState {
     let rq_success = hstat_plus.value_int("rq_success").unwrap_or(0);
     let rq_timeout = hstat_plus.value_int("rq_timeout").unwrap_or(0);
     let rq_total = hstat_plus.value_int("rq_total").unwrap_or(0);
+
+    // check first day of month, and reset month data
+    let current_date = chrono::Utc::now();
+    let day = current_date.day();
+    if day == 1 {
+      let total_latest = latests
+        .iter()
+        .find(|item| item.id == id)
+        .map(|item| item.rq_total)
+        .unwrap_or(0);
+      // if current rq_total less then latest, indicates that envoy has performed a monthly reset
+      if rq_total < total_latest {
+        self.reports.retain(|item| item.id != id);
+      }
+    }
 
     // update month report
     match self.reports.iter_mut().find(|report| report.id == id) {
