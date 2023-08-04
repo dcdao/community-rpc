@@ -15,6 +15,8 @@ impl EnvoyAnalysisService {
 
 impl EnvoyAnalysisService {
   pub async fn analysis(&self) -> FishnetResult<()> {
+    // todo: reset data the last day of month
+
     let cluster_info = reqwest::get(format!("{}/clusters?format=json", self.input.endpoint))
       .await?
       .json::<ClusterInfo>()
